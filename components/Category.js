@@ -1,11 +1,13 @@
 import React from 'react';
-import { StyleSheet, Image, Text, View } from 'react-native';
+import { StyleSheet, Image, Text, View, TouchableOpacity, Alert } from 'react-native';
 
-const Category = ({ img, text }) => {
-    return <View style={styles.Category}>
-        <Image style={styles.CategoryImage} source={img} />
-        <Text>{text}</Text>
-    </View>
+const Category = ({ img, text, onPress }) => {
+    return <TouchableOpacity onPress={onPress}>
+            <View style={styles.Category}>
+                <Image style={styles.CategoryImage} source={img} />
+                <Text>{text}</Text>
+            </View>
+        </TouchableOpacity>
 }
 export default Category;
 

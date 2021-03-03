@@ -1,26 +1,61 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, ScrollView, Text, View } from 'react-native';
-import Category from './components/Category';
-import koala from './assets/koala.png';
-import dog from './assets/dog.png';
-import panda from './assets/panda.png';
-import butterfly from './assets/butterfly.png';
-import beetle from './assets/beetle.png';
-import pig from './assets/pig.png';
+import { Text, View, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Home from './screens/Home';
+import Little from './screens/Little';
+import Payment from './screens/Payment';
+import Setting from './screens/Setting';
+import { CartProvider } from './context/Cart.Context';
 
-export default function App() {
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+const HomeStack = () => {
   return (
-    <View>
-      <ScrollView style={{paddingLeft: 16, paddingRight: 16}}>
-        <Category img={dog} text='Dog' />
-        <Category img={koala} text='Koala' />
-        <Category img={panda} text='Panda' />
-        <Category img={butterfly} text='Butterfly' />
-        <Category img={beetle} text='Beetle' />
-        <Category img={pig} text='Pig' />
-      </ScrollView>
-    </View>
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen name='Home' component={Home} options={{ title: 'Home' }} />
+        <Stack.Screen name='Little' component={Little}  options={({ route }) => ({ title: route.params.name })} />
+      </Stack.Navigator>
+  )
+}
+export default App = () => {
+  return (
+    <CartProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'Home') {
+                iconName = focused
+                  ? 'star'
+                  : 'star-outline';
+              } else if (route.name === 'Products') {
+                iconName = focused ? 'fast-food' : 'fast-food-outline';
+              } else if (route.name === 'Setting') {
+                iconName = focused ? 'ios-alert-circle' : 'ios-alert-circle-outline';
+              }
+
+              // You can return any component that you like here!
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: 'green',
+            inactiveTintColor: 'gray',
+          }}
+        >
+          <Tab.Screen name='Home' component={HomeStack} />
+          <Tab.Screen name='Products' component={Payment} />
+          <Tab.Screen name='Setting' component={Setting} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   );
 }
 
